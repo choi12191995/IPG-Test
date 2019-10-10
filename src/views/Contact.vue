@@ -3,7 +3,38 @@
     <section id="contact-title">
         <h1>Contact Form</h1>
         <div>
-            <fieldset></fieldset>
+            <form action="submit-to-server-here" method="POST" autocomplete="off" id="form" enctype="multipart/form-data">
+                <fieldset>
+                    <input type="text" placeholder="First Name" v-validate="{required: true, regex: /^[a-zA-Z]+$/}" name="first_name" data-vv-as="First Name" v-model="first_name">
+                   <span :class="{'invalid': errors.has('first_name'), 'valid': !errors.has('first_name')}">{{errors.first('first_name')}}<span v-if="(!errors.has('first_name') && first_name.length > 0)">First Name</span></span>
+                   <br><br>
+                   <input type="text" placeholder="Last Name" v-validate="{required: true, regex: /^[a-zA-Z-/w']+$/}" name="last_name" data-vv-as="Last Name" v-model="last_name">
+                   <span :class="{'invalid': errors.has('last_name'), 'valid': !errors.has('last_name')}">{{errors.first('last_name')}}<span v-if="(!errors.has('last_name') && last_name.length > 0)">Last Name</span></span>
+                   <br><br>
+                   <input type="text" placeholder="Email" v-validate="{required: true, email: true}" name="email" data-vv-as="Email" v-model="email">
+                   <span :class="{'invalid': errors.has('email'), 'valid': !errors.has('email')}">{{errors.first('email')}}<span v-if="(!errors.has('email') && email.length > 0)">Email</span></span>
+                   <br><br>
+                   <input type="text" placeholder="US Zip Code" v-validate="{required: true, regex: /^[0-9]{5}(?:-[0-9]{4})?$/}" name="us_zip_code" data-vv-as="US Zip Code" v-model="us_zip_code">
+                   <span :class="{'invalid': errors.has('us_zip_code'), 'valid': !errors.has('us_zip_code')}">{{errors.first('us_zip_code')}}<span v-if="(!errors.has('us_zip_code') && us_zip_code.length > 0)">US Zip Code</span></span>
+                   <br><br>
+<!--
+                   <select name="us_state" v-model="us_state" v-validate="{required: true}" data-vv-as="US State" ref="selectSize">
+                       <option value="">Please Select US State</option>
+                       <option :value="state" v-for="state in usStates">{{state}}</option>
+                   </select>
+                   <span :class="{'invalid': errors.has('us_state'), 'valid': !errors.has('us_state')}">{{errors.first('us_state')}}<span v-if="(!errors.has('us_state') && us_state.length > 0)">US State</span></span>
+-->
+                   <input type="text" placeholder="US States" v-model="stateSearch" @keyup="searchState(); setDisplayState();" class="input-list-triggle">
+                   <input type="text" v-validate="{required: true, usState: true}" name="us_state" data-vv-as="US States" v-model="us_state_formatted" v-show>
+                   <div class="dropdown-list-container">
+                       <div class="dropdown-list" v-for="state in filteredState" @click="selectedState(state.name)">
+                           <span>{{state.name}}</span>
+                       </div>
+                   </div>
+                   <span :class="{'invalid': errors.has('us_state'), 'valid': !errors.has('us_state')}">{{errors.first('us_state')}}<span v-if="(!errors.has('us_state') && us_state.length > 0)">US States</span></span>
+               <br><br>
+                </fieldset>
+            </form>
         </div>
     </section>
   </div>
@@ -11,41 +42,214 @@
 
 
 <script>
-    export default{
-
+    export default {
+        data: () => ({
+            first_name: "",
+            last_name: "",
+            email: "",
+            us_zip_code: "",
+            stateSearch: "",
+            us_state: "",
+            us_state_formatted: "",
+            usStates: [
+                { name: "Alabama", alpha: "AL" },
+                { name: "Alaska", alpha: "AK" },
+                { name: "Arizona", alpha: "AZ" },
+                { name: "Arkansas", alpha: "AR" },
+                { name: "California", alpha: "CA" },
+                { name: "Colorado", alpha: "CO" },
+                { name: "Connecticut", alpha: "CT" },
+                { name: "Delaware", alpha: "DE" },
+                { name: "District of Columbia", alpha: "DC" },
+                { name: "Florida", alpha: "FL" },
+                { name: "Georgia", alpha: "GA" },
+                { name: "Hawaii", alpha: "HI" },
+                { name: "Idaho", alpha: "ID" },
+                { name: "Illinois", alpha: "IL" },
+                { name: "Indiana", alpha: "IN" },
+                { name: "Iowa", alpha: "IA" },
+                { name: "Kansa", alpha: "KS" },
+                { name: "Kentucky", alpha: "KY" },
+                { name: "Lousiana", alpha: "LA" },
+                { name: "Maine", alpha: "ME" },
+                { name: "Maryland", alpha: "MD" },
+                { name: "Massachusetts", alpha: "MA" },
+                { name: "Michigan", alpha: "MI" },
+                { name: "Minnesota", alpha: "MN" },
+                { name: "Mississippi", alpha: "MS" },
+                { name: "Missouri", alpha: "MO" },
+                { name: "Montana", alpha: "MT" },
+                { name: "Nebraska", alpha: "NE" },
+                { name: "Nevada", alpha: "NV" },
+                { name: "New Hampshire", alpha: "NH" },
+                { name: "New Jersey", alpha: "NJ" },
+                { name: "New Mexico", alpha: "NM" },
+                { name: "New York", alpha: "NY" },
+                { name: "North Carolina", alpha: "NC" },
+                { name: "North Dakota", alpha: "ND" },
+                { name: "Ohio", alpha: "OH" },
+                { name: "Oklahoma", alpha: "OK" },
+                { name: "Oregon", alpha: "OR" },
+                { name: "Pennsylvania", alpha: "PA" },
+                { name: "Rhode Island", alpha: "RI" },
+                { name: "South Carolina", alpha: "SC" },
+                { name: "South Dakota", alpha: "SD" },
+                { name: "Tennessee", alpha: "TN" },
+                { name: "Texas", alpha: "TX" },
+                { name: "Utah", alpha: "UT" },
+                { name: "Vermont", alpha: "VT" },
+                { name: "Virginia", alpha: "VA" },
+                { name: "Washington", alpha: "WA" },
+                { name: "West Virginia", alpha: "WV" },
+                { name: "Wisconsin", alpha: "WI" },
+                { name: "Wyoming", alpha: "WY" }
+              ],
+        }),
+        created(){
+            this.$validator.extend("usState", {
+                getMessage: (field) => "Please fill up or select correct " + field,
+                validate: (input, args) => {
+                    for(var i = 0; i < this.usStates.length; i++){
+                        if(this.usStates[i].name == input){
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            })
+        },
+        computed: {
+            filteredState(){
+                return this.usStates.filter((list) => {
+                    return list.name.toLowerCase().includes(this.stateSearch.toLowerCase())
+                })
+            }
+        },
+        methods:{
+            searchState(){
+                let searchVal = this.stateSearch;
+                let StatesList = this.usStates;
+                this.us_state_formatted = searchVal;
+                for (var i = 0; i < StatesList.length; i++){
+                    if(StatesList[i] == searchVal){
+                        this.us_state_formatted = StatesList[i].value;
+                    }
+                }
+            },
+            setDisplayState(){
+                this.us_state = this.stateSearch;
+            },
+            selectedState(state){
+                this.stateSearch = state;
+                this.us_state = state;
+                this.us_state_formatted = state;
+            }
+        }
     }
+
 </script>
 
 
 <style lang="scss">
-    #contact-title{
-/*        height: 200px;*/
+    $validColor: #33DB40;
+    $invalidColor: #FF1A1A;
+    #contact-title {
+        /*        height: 200px;*/
         background-image: url("../assets/dummy-background-image.jpg");
         background-size: cover;
         background-position: center left;
         background-repeat: no-repeat;
         color: white;
         padding-bottom: 30px;
-/*
+        /*
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
 */
-        h1{
+        h1 {
             padding: 50px 0;
             font-size: 48px;
             margin: 0;
         }
-        >div{
+        >div {
             position: relative;
-            max-width: 800px;
-            height: 300px;
-            background: yellow;
+            max-width: 600px;
+/*            height: 300px;*/
+            /*            background: yellow;*/
             margin: 0 auto;
-            fieldset{
+            fieldset {
                 border: none;
             }
         }
     }
+
+    input, select {
+        border: none;
+        font-family: "Avenir", Helvetica, Arial, sans-serif;
+        box-sizing: border-box;
+        outline: none;
+        padding: 17.5px 0 7px 0;
+        font-size: 16px;
+        color: white;
+        height: 100%;
+        width: 100%;
+        display: block;
+        text-align: center;
+        background: none;
+        border-bottom: 1px solid white;
+    }
+    select{
+/*        display: none;*/
+        appearance: none;
+        border-radius: 0;
+        margin: 0;
+        display: block;
+        width: 100%;
+/*        padding: 12px 55px 15px 15px;*/
+        font-size: 16px;
+        color: white;
+/*
+        text-align-last: center;
+        text-align-last: center;
+       text-align: center;
+       -ms-text-align-last: center;
+       -moz-text-align-last: center;
+*/
+        padding-left: 50%;
+        &:after {
+          position: absolute;
+          content: "";
+          top: 14px;
+          right: 10px;
+          width: 0;
+          height: 0;
+          border: 6px solid transparent;
+          border-color: #fff transparent transparent transparent;
+        }
+        option{
+            text-align: center;
+            text-align-last: center;
+           text-align: center;
+           -ms-text-align-last: center;
+           -moz-text-align-last: center;
+        }
+    }
+
+    input:focus {
+        outline: none;
+    }
+
+    input::placeholder {
+        color: white;
+    }
+
+    fieldset>span.valid {
+        color: $validColor;
+    }
+
+    fieldset>span.invalid {
+        color: $invalidColor
+    }
+
 </style>
