@@ -17,13 +17,6 @@
                    <input type="text" placeholder="US Zip Code" v-validate="{required: true, regex: /^[0-9]{5}(?:-[0-9]{4})?$/}" name="us_zip_code" data-vv-as="US Zip Code" v-model="us_zip_code">
                    <span :class="{'invalid': errors.has('us_zip_code'), 'valid': !errors.has('us_zip_code')}">{{errors.first('us_zip_code')}}<span v-if="(!errors.has('us_zip_code') && us_zip_code.length > 0)">US Zip Code</span></span>
                    <br><br>
-<!--
-                   <select name="us_state" v-model="us_state" v-validate="{required: true}" data-vv-as="US State" ref="selectSize">
-                       <option value="">Please Select US State</option>
-                       <option :value="state" v-for="state in usStates">{{state}}</option>
-                   </select>
-                   <span :class="{'invalid': errors.has('us_state'), 'valid': !errors.has('us_state')}">{{errors.first('us_state')}}<span v-if="(!errors.has('us_state') && us_state.length > 0)">US State</span></span>
--->
                    <input type="text" placeholder="US States" v-model="stateSearch" @keyup="searchState(); setDisplayState();" class="input-list-triggle">
                    <input type="text" v-validate="{required: true, usState: true}" name="us_state" data-vv-as="US States" v-model="us_state_formatted" v-show>
                    <div class="dropdown-list-container">
@@ -32,7 +25,8 @@
                        </div>
                    </div>
                    <span :class="{'invalid': errors.has('us_state'), 'valid': !errors.has('us_state')}">{{errors.first('us_state')}}<span v-if="(!errors.has('us_state') && us_state.length > 0)">US States</span></span>
-               <br><br>
+                   <br><br>
+                   <div class="submit" @click="checkSubmit()">Submit</div>
                 </fieldset>
             </form>
         </div>
@@ -143,6 +137,13 @@
                 this.stateSearch = state;
                 this.us_state = state;
                 this.us_state_formatted = state;
+            },
+            checkSubmit(){
+                this.$validator.validateAll().then((result) => {
+                    if(result){
+                        alert("Vaildation Passed and Submit the form.")
+                    }
+                });
             }
         }
     }
@@ -180,6 +181,8 @@
             margin: 0 auto;
             fieldset {
                 border: none;
+                padding: 12px;
+                position: relative;
             }
         }
     }
@@ -250,6 +253,65 @@
 
     fieldset>span.invalid {
         color: $invalidColor
+    }
+
+    .dropdown-list-container{
+        position: relative;
+/*        width: calc(100% - 24px);*/
+        width: 100%;
+        max-height: 0px;
+        overflow: auto;
+        margin: 5px 0;
+/*
+        left: 12px;
+        top: calc(100% - 20px);
+*/
+        background-image: url("../assets/dummy-background-image.jpg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        z-index: 10;
+        visibility: hidden;
+/*        display: none;*/
+        transition: all 0.1s;
+        transition-delay: 0.1s;
+    }
+    .input-list-triggle:focus ~ .dropdown-list-container{
+        visibility: visible;
+        max-height: 200px;
+/*        display: block;*/
+    }
+    .dropdown-list{
+        height: 33px;
+        box-sizing: border-box;
+        padding: 10px;
+        cursor: pointer;
+    }
+    .dropdown-list > span{
+        border-bottom: 1px solid white;
+        width: 100%;
+        display: inline-block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .dropdown-list:last-child{
+        margin-bottom: 10px;
+    }
+    .dropdown-list:last-child > span{
+        border-bottom: none;
+    }
+    .submit{
+        margin-top: 20px;
+        display: inline-block;
+        padding: 10px;
+        cursor: pointer;
+        border: 1px solid white;
+        border-radius: 5px;
+        transition: all .25s;
+        &:hover{
+            background: rgba(255,255,255,0.2);
+        }
     }
 
 </style>
