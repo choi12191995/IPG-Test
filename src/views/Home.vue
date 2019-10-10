@@ -41,40 +41,40 @@ export default {
   components: {
     HelloWorld
   },
-    data: () => ({
-        swiperOption: {
-            slidesPerView: 4,
-          spaceBetween: 50,
-            loop: true,
-          pagination: {
-            el: '.swiper-pagination',
-            clickable: true
-          },
-          breakpoints: {
-            1000: {
-              slidesPerView: 3,
-              spaceBetween: 30
-            },
-            750: {
-              slidesPerView: 2,
-              spaceBetween: 20
-            },
-            500: {
-              slidesPerView: 1,
-              spaceBetween: 10
-            }
-          }
+  data: () => ({
+    swiperOption: {
+      slidesPerView: 4,
+      spaceBetween: 50,
+      loop: true,
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true
+      },
+      breakpoints: {
+        1000: {
+          slidesPerView: 3,
+          spaceBetween: 30
+        },
+        750: {
+          slidesPerView: 2,
+          spaceBetween: 20
+        },
+        500: {
+          slidesPerView: 1,
+          spaceBetween: 10
         }
-    }),
-    computed: {
-        swiper(){
-            return this.$refs.mySwiper.swiper
-        }
-    },
-    mounted(){
-//        console.log('this is current swiper instance object', this.swiper)
-        this.swiper.slideTo(0, 1000, false)
+      }
     }
+  }),
+  computed: {
+    swiper () {
+      return this.$refs.mySwiper.swiper
+    }
+  },
+  mounted () {
+    //        console.log('this is current swiper instance object', this.swiper)
+    this.swiper.slideTo(0, 1000, false)
+  }
 }
 </script>
 

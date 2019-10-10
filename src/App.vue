@@ -45,9 +45,9 @@ export default {
       this.mobileNav = !this.mobileNav
     }
   },
-    components:{
-        Footer
-    }
+  components: {
+    Footer
+  }
 }
 
 </script>

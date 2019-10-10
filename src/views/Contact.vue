@@ -34,122 +34,120 @@
   </div>
 </template>
 
-
 <script>
-    export default {
-        data: () => ({
-            first_name: "",
-            last_name: "",
-            email: "",
-            us_zip_code: "",
-            stateSearch: "",
-            us_state: "",
-            us_state_formatted: "",
-            usStates: [
-                { name: "Alabama", alpha: "AL" },
-                { name: "Alaska", alpha: "AK" },
-                { name: "Arizona", alpha: "AZ" },
-                { name: "Arkansas", alpha: "AR" },
-                { name: "California", alpha: "CA" },
-                { name: "Colorado", alpha: "CO" },
-                { name: "Connecticut", alpha: "CT" },
-                { name: "Delaware", alpha: "DE" },
-                { name: "District of Columbia", alpha: "DC" },
-                { name: "Florida", alpha: "FL" },
-                { name: "Georgia", alpha: "GA" },
-                { name: "Hawaii", alpha: "HI" },
-                { name: "Idaho", alpha: "ID" },
-                { name: "Illinois", alpha: "IL" },
-                { name: "Indiana", alpha: "IN" },
-                { name: "Iowa", alpha: "IA" },
-                { name: "Kansa", alpha: "KS" },
-                { name: "Kentucky", alpha: "KY" },
-                { name: "Lousiana", alpha: "LA" },
-                { name: "Maine", alpha: "ME" },
-                { name: "Maryland", alpha: "MD" },
-                { name: "Massachusetts", alpha: "MA" },
-                { name: "Michigan", alpha: "MI" },
-                { name: "Minnesota", alpha: "MN" },
-                { name: "Mississippi", alpha: "MS" },
-                { name: "Missouri", alpha: "MO" },
-                { name: "Montana", alpha: "MT" },
-                { name: "Nebraska", alpha: "NE" },
-                { name: "Nevada", alpha: "NV" },
-                { name: "New Hampshire", alpha: "NH" },
-                { name: "New Jersey", alpha: "NJ" },
-                { name: "New Mexico", alpha: "NM" },
-                { name: "New York", alpha: "NY" },
-                { name: "North Carolina", alpha: "NC" },
-                { name: "North Dakota", alpha: "ND" },
-                { name: "Ohio", alpha: "OH" },
-                { name: "Oklahoma", alpha: "OK" },
-                { name: "Oregon", alpha: "OR" },
-                { name: "Pennsylvania", alpha: "PA" },
-                { name: "Rhode Island", alpha: "RI" },
-                { name: "South Carolina", alpha: "SC" },
-                { name: "South Dakota", alpha: "SD" },
-                { name: "Tennessee", alpha: "TN" },
-                { name: "Texas", alpha: "TX" },
-                { name: "Utah", alpha: "UT" },
-                { name: "Vermont", alpha: "VT" },
-                { name: "Virginia", alpha: "VA" },
-                { name: "Washington", alpha: "WA" },
-                { name: "West Virginia", alpha: "WV" },
-                { name: "Wisconsin", alpha: "WI" },
-                { name: "Wyoming", alpha: "WY" }
-              ],
-        }),
-        created(){
-            this.$validator.extend("usState", {
-                getMessage: (field) => "Please fill up or select correct " + field,
-                validate: (input, args) => {
-                    for(var i = 0; i < this.usStates.length; i++){
-                        if(this.usStates[i].name == input){
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-            })
-        },
-        computed: {
-            filteredState(){
-                return this.usStates.filter((list) => {
-                    return list.name.toLowerCase().includes(this.stateSearch.toLowerCase())
-                })
-            }
-        },
-        methods:{
-            searchState(){
-                let searchVal = this.stateSearch;
-                let StatesList = this.usStates;
-                this.us_state_formatted = searchVal;
-                for (var i = 0; i < StatesList.length; i++){
-                    if(StatesList[i] == searchVal){
-                        this.us_state_formatted = StatesList[i].value;
-                    }
-                }
-            },
-            setDisplayState(){
-                this.us_state = this.stateSearch;
-            },
-            selectedState(state){
-                this.stateSearch = state;
-                this.us_state = state;
-                this.us_state_formatted = state;
-            },
-            checkSubmit(){
-                this.$validator.validateAll().then((result) => {
-                    if(result){
-                        alert("Vaildation Passed and Submit the form.")
-                    }
-                });
-            }
+export default {
+  data: () => ({
+    first_name: '',
+    last_name: '',
+    email: '',
+    us_zip_code: '',
+    stateSearch: '',
+    us_state: '',
+    us_state_formatted: '',
+    usStates: [
+      { name: 'Alabama', alpha: 'AL' },
+      { name: 'Alaska', alpha: 'AK' },
+      { name: 'Arizona', alpha: 'AZ' },
+      { name: 'Arkansas', alpha: 'AR' },
+      { name: 'California', alpha: 'CA' },
+      { name: 'Colorado', alpha: 'CO' },
+      { name: 'Connecticut', alpha: 'CT' },
+      { name: 'Delaware', alpha: 'DE' },
+      { name: 'District of Columbia', alpha: 'DC' },
+      { name: 'Florida', alpha: 'FL' },
+      { name: 'Georgia', alpha: 'GA' },
+      { name: 'Hawaii', alpha: 'HI' },
+      { name: 'Idaho', alpha: 'ID' },
+      { name: 'Illinois', alpha: 'IL' },
+      { name: 'Indiana', alpha: 'IN' },
+      { name: 'Iowa', alpha: 'IA' },
+      { name: 'Kansa', alpha: 'KS' },
+      { name: 'Kentucky', alpha: 'KY' },
+      { name: 'Lousiana', alpha: 'LA' },
+      { name: 'Maine', alpha: 'ME' },
+      { name: 'Maryland', alpha: 'MD' },
+      { name: 'Massachusetts', alpha: 'MA' },
+      { name: 'Michigan', alpha: 'MI' },
+      { name: 'Minnesota', alpha: 'MN' },
+      { name: 'Mississippi', alpha: 'MS' },
+      { name: 'Missouri', alpha: 'MO' },
+      { name: 'Montana', alpha: 'MT' },
+      { name: 'Nebraska', alpha: 'NE' },
+      { name: 'Nevada', alpha: 'NV' },
+      { name: 'New Hampshire', alpha: 'NH' },
+      { name: 'New Jersey', alpha: 'NJ' },
+      { name: 'New Mexico', alpha: 'NM' },
+      { name: 'New York', alpha: 'NY' },
+      { name: 'North Carolina', alpha: 'NC' },
+      { name: 'North Dakota', alpha: 'ND' },
+      { name: 'Ohio', alpha: 'OH' },
+      { name: 'Oklahoma', alpha: 'OK' },
+      { name: 'Oregon', alpha: 'OR' },
+      { name: 'Pennsylvania', alpha: 'PA' },
+      { name: 'Rhode Island', alpha: 'RI' },
+      { name: 'South Carolina', alpha: 'SC' },
+      { name: 'South Dakota', alpha: 'SD' },
+      { name: 'Tennessee', alpha: 'TN' },
+      { name: 'Texas', alpha: 'TX' },
+      { name: 'Utah', alpha: 'UT' },
+      { name: 'Vermont', alpha: 'VT' },
+      { name: 'Virginia', alpha: 'VA' },
+      { name: 'Washington', alpha: 'WA' },
+      { name: 'West Virginia', alpha: 'WV' },
+      { name: 'Wisconsin', alpha: 'WI' },
+      { name: 'Wyoming', alpha: 'WY' }
+    ]
+  }),
+  created () {
+    this.$validator.extend('usState', {
+      getMessage: (field) => 'Please fill up or select correct ' + field,
+      validate: (input, args) => {
+        for (var i = 0; i < this.usStates.length; i++) {
+          if (this.usStates[i].name == input) {
+            return true
+          }
         }
+        return false
+      }
+    })
+  },
+  computed: {
+    filteredState () {
+      return this.usStates.filter((list) => {
+        return list.name.toLowerCase().includes(this.stateSearch.toLowerCase())
+      })
     }
+  },
+  methods: {
+    searchState () {
+      let searchVal = this.stateSearch
+      let StatesList = this.usStates
+      this.us_state_formatted = searchVal
+      for (var i = 0; i < StatesList.length; i++) {
+        if (StatesList[i] == searchVal) {
+          this.us_state_formatted = StatesList[i].value
+        }
+      }
+    },
+    setDisplayState () {
+      this.us_state = this.stateSearch
+    },
+    selectedState (state) {
+      this.stateSearch = state
+      this.us_state = state
+      this.us_state_formatted = state
+    },
+    checkSubmit () {
+      this.$validator.validateAll().then((result) => {
+        if (result) {
+          alert('Vaildation Passed and Submit the form.')
+        }
+      })
+    }
+  }
+}
 
 </script>
-
 
 <style lang="scss">
     $validColor: #33DB40;
